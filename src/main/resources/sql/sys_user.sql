@@ -1,0 +1,2 @@
+INSERT INTO `sys_user` (`id`, `uesrname`, `password`, `nickname`, `email`, `phone`, `address`, `create_time`, `create_user`, `update_time`, `update_user`) VALUES (1, 'admin', 'admin', '管理员', 'admin@qq.com', ' ', '上海', '2022-11-23 14:01:33', NULL, '2022-11-23 14:01:33', NULL);
+INSERT INTO `sys_user` (`id`, `uesrname`, `password`, `nickname`, `email`, `phone`, `address`, `create_time`, `create_user`, `update_time`, `update_user`) VALUES (2, NULL, 'zhangsan', '张三', 'zhangsan@qq.com', NULL, NULL, NULL, NULL, NULL, NULL);
