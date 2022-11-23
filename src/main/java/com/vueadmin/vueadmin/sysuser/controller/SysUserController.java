@@ -52,12 +52,45 @@ public class SysUserController {
         return this.sysUserService.queryAll(sysUser);
     }
 
+    /**
+     * @Title:
+     * @Description: 新增用户
+     * @ClassName: path: com.vueadmin.vueadmin.sysuser.controller.SysUserController  -->  function:
+     * @Param:
+     * @return:
+     * @Author: pkqLin
+     * @Date: 2022/11/23 17:04
+     * @version V1.0
+    */
     @PostMapping("insert")
     public SysUser insert(@RequestBody SysUser sysUser) {
         this.sysUserService.insert(sysUser);
         return sysUser;
     }
 
+
+    /**
+     * 修改数据
+     *
+     * @param sysUser 实例对象
+     * @return 实例对象
+     */
+    @PostMapping("update")
+    public SysUser update(@RequestBody SysUser sysUser) {
+        this.sysUserService.update(sysUser);
+        return this.sysUserService.queryById(sysUser.getId());
+    }
+
+    /* *
+     * 通过主键删除数据
+     *
+     * @param id 主键
+     * @return 是否成功
+     */
+    @DeleteMapping
+    public boolean deleteById(@PathVariable Integer id) {
+        return this.sysUserService.deleteById(id);
+    }
 
 
 }
