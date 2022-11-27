@@ -1,5 +1,9 @@
 package com.vueadmin.vueadmin.sysuser.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,19 +20,22 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@TableName(value="sys_user")
 public class SysUser implements Serializable {
     private static final long serialVersionUID = -34458903758219904L;
     /**
      * id
      */
+    @TableId(type = IdType.AUTO)
     private Integer id;
     /**
      * 用户名
      */
-    private String uesrname;
+    private String username;
     /**
      * 密码
      */
+    @JsonIgnore //忽略不展示摸个字段
     private String password;
     /**
      * 昵称

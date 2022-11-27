@@ -12,7 +12,6 @@ import org.springframework.context.ApplicationContext;
 public class VueadminApplication {
     private  static ApplicationContext applicationContext;
     public static void main(String[] args) {
-        System.out.println(applicationContext);
         SpringApplication.run(VueadminApplication.class, args);
     }
 

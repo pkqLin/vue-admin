@@ -3,11 +3,14 @@ package com.vueadmin.vueadmin.sysuser.controller;
 import com.vueadmin.vueadmin.sysuser.entity.SysUser;
 import com.vueadmin.vueadmin.sysuser.mapper.SysUserMapper;
 import com.vueadmin.vueadmin.sysuser.service.SysUserService;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * (SysUser)表控制层
@@ -23,7 +26,6 @@ public class SysUserController {
      */
     @Autowired
     private SysUserService sysUserService;
-
 
 
     /**
@@ -46,7 +48,7 @@ public class SysUserController {
      * @Author: pkqLin
      * @Date: 2022/11/23 16:50
      * @version V1.0
-    */
+     */
     @GetMapping("selectAll")
     public List<SysUser> queryAll(@RequestBody SysUser sysUser) {
         return this.sysUserService.queryAll(sysUser);
@@ -61,13 +63,18 @@ public class SysUserController {
      * @Author: pkqLin
      * @Date: 2022/11/23 17:04
      * @version V1.0
-    */
+     */
     @PostMapping("insert")
     public SysUser insert(@RequestBody SysUser sysUser) {
         this.sysUserService.insert(sysUser);
         return sysUser;
     }
 
+    @PostMapping("insert1")
+    public boolean insert1(@RequestBody SysUser sysUser) {
+        return this.sysUserService.save(sysUser);
+
+    }
 
     /**
      * 修改数据
@@ -92,5 +99,25 @@ public class SysUserController {
         return this.sysUserService.deleteById(id);
     }
 
+    /** 
+     * @Title:
+     * @Description: 分页查询用户
+     * @ClassName: path: com.vueadmin.vueadmin.sysuser.controller.SysUserController  -->  function: 
+     * @Param:  
+     * @return:  
+     * @Author: pkqLin
+     * @Date: 2022/11/24 13:47
+     * @version V1.0
+    */ 
+    @GetMapping("page")
+    public Map<String ,Object>  findPage(@RequestParam int pageNum, @RequestParam int pageSize) {
+        pageNum = (pageNum - 1) * pageSize;
+        List<SysUser> all = this.sysUserService.queryAllByLimit(pageNum, pageSize);
+        Map<String ,Object> res  =new HashMap<>();
+        int total =this.sysUserService.total(pageNum);
+        res.put("data",all);
+        res.put("total",total);
+        return res;
+    }
 
 }

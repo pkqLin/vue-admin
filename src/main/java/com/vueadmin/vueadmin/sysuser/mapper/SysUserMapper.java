@@ -1,5 +1,6 @@
 package com.vueadmin.vueadmin.sysuser.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.vueadmin.vueadmin.sysuser.entity.SysUser;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -14,8 +15,8 @@ import java.util.List;
  * @since 2022-11-23 14:04:55
  */
 
-@Mapper
-public interface SysUserMapper {
+//@Mapper
+public interface SysUserMapper extends BaseMapper<SysUser> {
 
     /**
      * 通过ID查询单条数据
@@ -83,6 +84,9 @@ public interface SysUserMapper {
      * @return 影响行数*/
 
     int deleteById(Integer id);
+
+
+    int total(int num);
 
 }
 
