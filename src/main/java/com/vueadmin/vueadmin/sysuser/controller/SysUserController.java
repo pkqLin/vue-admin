@@ -1,5 +1,8 @@
 package com.vueadmin.vueadmin.sysuser.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.vueadmin.vueadmin.sysuser.entity.SysUser;
 import com.vueadmin.vueadmin.sysuser.mapper.SysUserMapper;
 import com.vueadmin.vueadmin.sysuser.service.SysUserService;
@@ -101,7 +104,7 @@ public class SysUserController {
 
     /** 
      * @Title:
-     * @Description: 分页查询用户
+     * @Description: 分页查询用户-手写
      * @ClassName: path: com.vueadmin.vueadmin.sysuser.controller.SysUserController  -->  function: 
      * @Param:  
      * @return:  
@@ -109,7 +112,7 @@ public class SysUserController {
      * @Date: 2022/11/24 13:47
      * @version V1.0
     */ 
-    @GetMapping("page")
+/*    @GetMapping("page")
     public Map<String ,Object>  findPage(@RequestParam int pageNum, @RequestParam int pageSize) {
         pageNum = (pageNum - 1) * pageSize;
         List<SysUser> all = this.sysUserService.queryAllByLimit(pageNum, pageSize);
@@ -118,6 +121,24 @@ public class SysUserController {
         res.put("data",all);
         res.put("total",total);
         return res;
+    }*/
+
+    /**
+     * @Title:
+     * @Description: mybatics 方式分页查询
+     * @ClassName: path: com.vueadmin.vueadmin.sysuser.controller.SysUserController  -->  function:
+     * @Param:
+     * @return:
+     * @Author: pkqLin
+     * @Date: 2022/11/28 10:43
+     * @version V1.0
+    */
+    @GetMapping("page")
+    public IPage<SysUser>  findPage(@RequestParam int pageNum, @RequestParam int pageSize) {
+        IPage<SysUser> page =new Page<>(pageNum,pageSize);
+        QueryWrapper<SysUser> queryWrapper = new QueryWrapper<>();
+        IPage<SysUser> pageUser =this.sysUserService.page(page,queryWrapper);
+        return  pageUser;
     }
 
 }
