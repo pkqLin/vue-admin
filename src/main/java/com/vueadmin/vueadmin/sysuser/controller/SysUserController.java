@@ -134,9 +134,10 @@ public class SysUserController {
      * @version V1.0
     */
     @GetMapping("page")
-    public IPage<SysUser>  findPage(@RequestParam int pageNum, @RequestParam int pageSize) {
+    public IPage<SysUser>  findPage(@RequestParam int pageNum, @RequestParam int pageSize,@RequestParam String username) {
         IPage<SysUser> page =new Page<>(pageNum,pageSize);
         QueryWrapper<SysUser> queryWrapper = new QueryWrapper<>();
+        queryWrapper.like("username",username);
         IPage<SysUser> pageUser =this.sysUserService.page(page,queryWrapper);
         return  pageUser;
     }
