@@ -1,8 +1,8 @@
 package com.vueadmin.vueadmin.sysuser.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.vueadmin.vueadmin.sysuser.entity.SysUser;
-import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
@@ -26,7 +26,6 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
      */
     SysUser queryById(Integer id);
 
-
    /* *
      * 查询指定行数据
      *
@@ -35,7 +34,6 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
      * @return 对象列表*/
 
     List<SysUser> queryAllByLimit(@Param("offset") int offset, @Param("limit") int limit);
-
 
    /* *
      * 通过实体作为筛选条件查询
@@ -87,6 +85,9 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
 
 
     int total(int num);
+
+
+    Page<SysUser> findPage(Page<SysUser> page, @Param("username") String username);
 
 }
 

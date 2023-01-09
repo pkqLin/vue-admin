@@ -8,7 +8,7 @@ import org.springframework.context.ApplicationContext;
 
 
 @SpringBootApplication()
-@MapperScan("com.vueadmin.vueadmin")
+@MapperScan("com.vueadmin.vueadmin.*.mapper")
 public class VueadminApplication {
     private  static ApplicationContext applicationContext;
     public static void main(String[] args) {

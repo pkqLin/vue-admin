@@ -1,12 +1,8 @@
 package com.vueadmin.vueadmin.sysuser.service;
 
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.vueadmin.vueadmin.sysuser.entity.SysUser;
-import com.vueadmin.vueadmin.sysuser.mapper.SysUserMapper;
-import org.apache.catalina.User;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -16,11 +12,7 @@ import java.util.List;
  * @author makejava
  * @since 2022-11-23 14:04:59
  */
-@Service
-public class SysUserService extends ServiceImpl<SysUserMapper,SysUser> {
-
-    @Autowired
-    private SysUserMapper sysUserMapper;
+public interface SysUserService extends IService<SysUser> {
 
     /**
      * 通过ID查询单条数据
@@ -28,9 +20,7 @@ public class SysUserService extends ServiceImpl<SysUserMapper,SysUser> {
      * @param id 主键
      * @return 实例对象
      */
-    public SysUser queryById(Integer id) {
-        return this.sysUserMapper.queryById(id);
-    }
+    SysUser queryById(Integer id);
 
     /**
      * @Title:
@@ -42,9 +32,7 @@ public class SysUserService extends ServiceImpl<SysUserMapper,SysUser> {
      * @Date: 2022/11/23 16:51
      * @version V1.0
      */
-    public List<SysUser> queryAll(SysUser sysUser) {
-        return this.sysUserMapper.queryAll(sysUser);
-    }
+    List<SysUser> queryAll(SysUser sysUser);
 
     /**
      * 查询多条数据
@@ -53,20 +41,14 @@ public class SysUserService extends ServiceImpl<SysUserMapper,SysUser> {
      * @param limit  查询条数
      * @return 对象列表
      */
-    public List<SysUser> queryAllByLimit(int offset, int limit) {
-        return this.sysUserMapper.queryAllByLimit(offset, limit);
-    }
+    List<SysUser> queryAllByLimit(int offset, int limit);
 
     /* *
      * 新增数据
      *
      * @param sysUser 实例对象
      * @return 实例对象*/
-
-    public SysUser insert(SysUser sysUser) {
-        this.sysUserMapper.insert(sysUser);
-        return sysUser;
-    }
+    SysUser insert(SysUser sysUser);
 
     /**
      * 修改数据
@@ -74,10 +56,7 @@ public class SysUserService extends ServiceImpl<SysUserMapper,SysUser> {
      * @param sysUser 实例对象
      * @return 实例对象
      */
-    public SysUser update(SysUser sysUser) {
-        this.sysUserMapper.update(sysUser);
-        return this.queryById(sysUser.getId());
-    }
+    SysUser update(SysUser sysUser);
 
     /* *
      * 通过主键删除数据
@@ -85,16 +64,12 @@ public class SysUserService extends ServiceImpl<SysUserMapper,SysUser> {
      * @param id 主键
      * @return 是否成功
      */
-    public boolean deleteById(Integer id) {
-        return this.sysUserMapper.deleteById(id) > 0;
-    }
+    boolean deleteById(Integer id);
 
-    public int total(int num) {
-        return this.sysUserMapper.total(num);
-    }
+    int total(int num);
 
     @Override
-    public boolean save(SysUser user){
-        return saveOrUpdate(user);
-    }
+    boolean save(SysUser user);
+
+    Page<SysUser> findPage(Page<SysUser> objectPage, String username);
 }
