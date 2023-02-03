@@ -30,7 +30,7 @@ public class SwaggerConfig {
                 .useDefaultResponseMessages(true)
                 .forCodeGeneration(false)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.vueadmin.vueadmin.sysuser.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.vueadmin.vueadmin.system.controller"))
                 .paths(PathSelectors.any())
                 .build();
     }

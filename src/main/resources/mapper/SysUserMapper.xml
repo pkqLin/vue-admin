@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.vueadmin.vueadmin.sysuser.mapper.SysUserMapper">
+<mapper namespace="com.vueadmin.vueadmin.system.mapper.SysUserMapper">
 
-    <resultMap type="com.vueadmin.vueadmin.sysuser.entity.SysUser" id="SysUserMap">
+    <resultMap type="com.vueadmin.vueadmin.system.entity.SysUser" id="SysUserMap">
         <result property="id" column="id" jdbcType="INTEGER"/>
         <result property="username" column="username" jdbcType="VARCHAR"/>
         <result property="password" column="password" jdbcType="VARCHAR"/>
@@ -14,12 +14,13 @@
         <result property="createUser" column="create_user" jdbcType="VARCHAR"/>
         <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
         <result property="updateUser" column="update_user" jdbcType="VARCHAR"/>
+        <result property="avatarUrl" column="avatar_url" jdbcType="VARCHAR"/>
     </resultMap>
 
     <!--查询单个-->
     <select id="queryById" resultMap="SysUserMap">
         select
-          id, username, password, nickname, email, phone, address, create_time, create_user, update_time, update_user
+          id, username, password, nickname, email, phone, address, create_time, create_user, update_time, update_user,avatar_url
         from sys_user
         where id = #{id}
     </select>
@@ -27,7 +28,7 @@
     <!--查询指定行数据-->
     <select id="queryAllByLimit" resultMap="SysUserMap">
         select
-          id, username, password, nickname, email, phone, address, create_time, create_user, update_time, update_user
+          id, username, password, nickname, email, phone, address, create_time, create_user, update_time, update_user,avatar_url
         from sys_user
         limit #{offset}, #{limit}
     </select>
@@ -35,7 +36,7 @@
     <!--通过实体作为筛选条件查询-->
     <select id="queryAll" resultMap="SysUserMap">
         select
-        id, username, password, nickname, email, phone, address, create_time, create_user, update_time, update_user
+        id, username, password, nickname, email, phone, address, create_time, create_user, update_time, update_user,avatar_url
         from sys_user
         <where>
             <if test="id != null">
@@ -76,27 +77,27 @@
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="id" useGeneratedKeys="true">
-        insert into sys_user(username, password, nickname, email, phone, address, create_time, create_user, update_time, update_user)
-        values (#{username}, #{password}, #{nickname}, #{email}, #{phone}, #{address}, #{createTime}, #{createUser}, #{updateTime}, #{updateUser})
+        insert into sys_user(username, password, nickname, email, phone, address, create_time, create_user, update_time, update_user,avatar_url)
+        values (#{username}, #{password}, #{nickname}, #{email}, #{phone}, #{address}, #{createTime}, #{createUser}, #{updateTime}, #{updateUser},#{avatarUrl})
     </insert>
 
     <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
         insert into sys_user(username, password, nickname, email, phone, address, create_time, create_user,
-        update_time, update_user)
+        update_time, update_user,avatar_url)
         values
-        <foreach collection="entities" item="com.vueadmin.vueadmin.sysuser.entity" separator=",">
+        <foreach collection="entities" item="com.vueadmin.vueadmin.system.entity" separator=",">
             (#{entity.username}, #{entity.password}, #{entity.nickname}, #{entity.email}, #{entity.phone},
-            #{entity.address}, #{entity.createTime}, #{entity.createUser}, #{entity.updateTime}, #{entity.updateUser})
+            #{entity.address}, #{entity.createTime}, #{entity.createUser}, #{entity.updateTime}, #{entity.updateUser},#{entity.avatarUrl})
         </foreach>
     </insert>
 
     <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
         insert into sys_user(username, password, nickname, email, phone, address, create_time, create_user,
-        update_time, update_user)
+        update_time, update_user,avatar_url)
         values
-        <foreach collection="entities" item="com.vueadmin.vueadmin.sysuser.entity" separator=",">
+        <foreach collection="entities" item="com.vueadmin.vueadmin.system.entity" separator=",">
             (#{entity.username}, #{entity.password}, #{entity.nickname}, #{entity.email}, #{entity.phone},
-            #{entity.address}, #{entity.createTime}, #{entity.createUser}, #{entity.updateTime}, #{entity.updateUser})
+            #{entity.address}, #{entity.createTime}, #{entity.createUser}, #{entity.updateTime}, #{entity.updateUser},#{entity.avatarUrl})
         </foreach>
         on duplicate key update
         username = values(username) , password = values(password) , nickname = values(nickname) , email = values(email)
@@ -137,6 +138,9 @@
             </if>
             <if test="updateUser != null and updateUser != ''">
                 update_user = #{updateUser},
+            </if>
+            <if test="avatarUrl != null and avatarUrl != ''">
+                avatar_url = #{avatarUrl},
             </if>
         </set>
         where id = #{id}

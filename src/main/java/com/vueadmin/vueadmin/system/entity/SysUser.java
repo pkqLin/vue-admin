@@ -1,4 +1,4 @@
-package com.vueadmin.vueadmin.sysuser.entity;
+package com.vueadmin.vueadmin.system.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -69,6 +69,10 @@ public class SysUser implements Serializable {
      * 更新人
      */
     private String updateUser;
+    /**
+     * 头像url
+     */
+    private String avatarUrl;
 
 
 

@@ -1,10 +1,9 @@
-package com.vueadmin.vueadmin.sysuser.mapper;
+package com.vueadmin.vueadmin.system.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.vueadmin.vueadmin.sysuser.entity.SysUser;
+import com.vueadmin.vueadmin.system.entity.SysUser;
 import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 

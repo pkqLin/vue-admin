@@ -1,8 +1,9 @@
-package com.vueadmin.vueadmin.sysuser.service;
+package com.vueadmin.vueadmin.system.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.vueadmin.vueadmin.sysuser.entity.SysUser;
+import com.vueadmin.vueadmin.system.controller.dto.UserDto;
+import com.vueadmin.vueadmin.system.entity.SysUser;
 
 import java.util.List;
 
@@ -25,7 +26,7 @@ public interface SysUserService extends IService<SysUser> {
     /**
      * @Title:
      * @Description: 查询所有数据
-     * @ClassName: path: com.vueadmin.vueadmin.sysuser.service.SysUserService  -->  function:
+     * @ClassName: path: com.vueadmin.vueadmin.system.service.SysUserService  -->  function:
      * @Param:
      * @return:
      * @Author: pkqLin
@@ -43,11 +44,12 @@ public interface SysUserService extends IService<SysUser> {
      */
     List<SysUser> queryAllByLimit(int offset, int limit);
 
-    /* *
-     * 新增数据
+    /**
+     * 修改数据
      *
      * @param sysUser 实例对象
-     * @return 实例对象*/
+     * @return 实例对象
+     */
     SysUser insert(SysUser sysUser);
 
     /**
@@ -66,10 +68,18 @@ public interface SysUserService extends IService<SysUser> {
      */
     boolean deleteById(Integer id);
 
+    /** 
+     * @Description: 查新分页的总数
+     * @Param:  
+     * @Author: pkqLin
+     * @Date: 2023/2/3 13:19
+     * @version V1.0
+    */ 
     int total(int num);
 
-    @Override
-    boolean save(SysUser user);
-
     Page<SysUser> findPage(Page<SysUser> objectPage, String username);
+
+    UserDto login(UserDto userDto);
+
+    SysUser register(UserDto userDTO);
 }

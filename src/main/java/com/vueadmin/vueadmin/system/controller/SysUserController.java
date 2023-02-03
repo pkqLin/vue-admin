@@ -1,19 +1,17 @@
-package com.vueadmin.vueadmin.sysuser.controller;
+package com.vueadmin.vueadmin.system.controller;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.poi.excel.ExcelReader;
 import cn.hutool.poi.excel.ExcelUtil;
 import cn.hutool.poi.excel.ExcelWriter;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.vueadmin.vueadmin.common.Constants;
 import com.vueadmin.vueadmin.common.Result;
-import com.vueadmin.vueadmin.sysuser.entity.SysUser;
-import com.vueadmin.vueadmin.sysuser.mapper.SysUserMapper;
-import com.vueadmin.vueadmin.sysuser.service.SysUserService;
-import org.apache.catalina.User;
-import org.apache.catalina.filters.ExpiresFilter;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.vueadmin.vueadmin.system.controller.dto.UserDto;
+import com.vueadmin.vueadmin.system.entity.SysUser;
+import com.vueadmin.vueadmin.system.service.SysUserService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,9 +20,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
 import java.net.URLEncoder;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * (SysUser)表控制层
@@ -41,6 +37,42 @@ public class SysUserController {
     @Resource
     private SysUserService sysUserService;
 
+    /**
+     * @Description: 登录接口
+     * @Param: [userDto]
+     * @Author: pkqLin
+     * @Date: 2023/2/3 10:20
+     * @version V1.0
+     */
+    @PostMapping("login")
+    public Result login(@RequestBody UserDto userDto) {
+        String username = userDto.getUsername();
+        String password = userDto.getPassword();
+        if (StrUtil.isBlank(username) || StrUtil.isBlank(password)) {
+            return Result.error(Constants.CODE_400, "参数错误");
+        }
+        UserDto dto = sysUserService.login(userDto);
+        return Result.success(dto);
+    }
+
+
+    /**
+     * @Description: 注册接口
+     * @Param: [userDTO]
+     * @Author: pkqLin
+     * @Date: 2023/2/3 10:20
+     * @version V1.0
+     */
+    @PostMapping("register")
+    public Result register(@RequestBody UserDto userDTO) {
+        String username = userDTO.getUsername();
+        String password = userDTO.getPassword();
+        if (StrUtil.isBlank(username) || StrUtil.isBlank(password)) {
+            return Result.error(Constants.CODE_400, "参数错误");
+        }
+        return Result.success(sysUserService.register(userDTO));
+    }
+
 
     /**
      * 通过主键查询单条数据
@@ -49,14 +81,28 @@ public class SysUserController {
      * @return 单条数据
      */
     @GetMapping("selectOne")
-    public SysUser selectOne(Integer id) {
-        return this.sysUserService.queryById(id);
+    public Result selectOne(Integer id) {
+        return Result.success(this.sysUserService.queryById(id));
+    }
+
+    /** 
+     * @Description: 通过用户名进行查询
+     * @Param:  
+     * @Author: pkqLin
+     * @Date: 2023/2/3 10:26
+     * @version V1.0
+    */
+    @GetMapping("/username/{username}")
+    public Result selectOne(@PathVariable String username){
+        QueryWrapper<SysUser> queryWrapper=new QueryWrapper<>();
+        queryWrapper.eq("username",username);
+        return Result.success(this.sysUserService.getOne(queryWrapper));
     }
 
     /**
      * @Title:
      * @Description: 查询所有用户数据
-     * @ClassName: path: com.vueadmin.vueadmin.sysuser.controller.SysUserController  -->  function:
+     * @ClassName: path: com.vueadmin.vueadmin.system.controller.SysUserController  -->  function:
      * @Param:
      * @return:
      * @Author: pkqLin
@@ -64,31 +110,30 @@ public class SysUserController {
      * @version V1.0
      */
     @GetMapping("selectAll")
-    public List<SysUser> queryAll(@RequestBody SysUser sysUser) {
-        return this.sysUserService.queryAll(sysUser);
+    public Result queryAll(@RequestBody SysUser sysUser) {
+        return Result.success(this.sysUserService.queryAll(sysUser));
     }
 
     /**
-     * @Title:
-     * @Description: 新增用户
-     * @ClassName: path: com.vueadmin.vueadmin.sysuser.controller.SysUserController  -->  function:
-     * @Param:
-     * @return:
+     * @Description: 更新数据
+     * @Param: [sysUser]
      * @Author: pkqLin
-     * @Date: 2022/11/23 17:04
+     * @Date: 2023/2/3 10:58
      * @version V1.0
      */
-    @PostMapping(" ")
-    public SysUser insert(@RequestBody SysUser sysUser) {
-        this.sysUserService.insert(sysUser);
-        return sysUser;
+    @PostMapping("saveOrUpdate")
+    public Result saveOrUpdate(@RequestBody SysUser sysUser) {
+        if (sysUser.getId() == null && sysUser.getPassword() == null) {  // 新增用户默认密码
+//            user.setPassword( SecureUtil.md5("123"));
+        }
+        return Result.success(this.sysUserService.saveOrUpdate(sysUser));
     }
 
-    @PostMapping("insert1")
-    public boolean insert1(@RequestBody SysUser sysUser) {
-        return this.sysUserService.save(sysUser);
+    /*@PostMapping("insert1")
+    public Result insert1(@RequestBody SysUser sysUser) {
+        return Result.success(this.sysUserService.save(sysUser));
 
-    }
+    }*/
 
     /**
      * 修改数据
@@ -97,9 +142,9 @@ public class SysUserController {
      * @return 实例对象
      */
     @PostMapping("update")
-    public SysUser update(@RequestBody SysUser sysUser) {
+    public Result update(@RequestBody SysUser sysUser) {
         this.sysUserService.update(sysUser);
-        return this.sysUserService.queryById(sysUser.getId());
+        return Result.success(this.sysUserService.queryById(sysUser.getId()));
     }
 
     /* *
@@ -109,14 +154,14 @@ public class SysUserController {
      * @return 是否成功
      */
     @DeleteMapping("/{id}")
-    public boolean deleteById(@PathVariable Integer id) {
-        return this.sysUserService.deleteById(id);
+    public Result deleteById(@PathVariable Integer id) {
+        return Result.success(this.sysUserService.deleteById(id));
     }
 
     /**
      * @Title:
      * @Description: 分页查询用户-手写
-     * @ClassName: path: com.vueadmin.vueadmin.sysuser.controller.SysUserController  -->  function: 
+     * @ClassName: path: com.vueadmin.vueadmin.system.controller.SysUserController  -->  function:
      * @Param:
      * @return:
      * @Author: pkqLin
@@ -137,7 +182,7 @@ public class SysUserController {
     /**
      * @Title:
      * @Description: mybatics 方式分页查询
-     * @ClassName: path: com.vueadmin.vueadmin.sysuser.controller.SysUserController  -->  function:
+     * @ClassName: path: com.vueadmin.vueadmin.system.controller.SysUserController  -->  function:
      * @Param:
      * @return:
      * @Author: pkqLin
@@ -157,7 +202,7 @@ public class SysUserController {
     /**
      * @Title:
      * @Description: 导出
-     * @ClassName: path: com.vueadmin.vueadmin.sysuser.controller.SysUserController  -->  function:
+     * @ClassName: path: com.vueadmin.vueadmin.system.controller.SysUserController  -->  function:
      * @Param:
      * @return:
      * @Author: pkqLin
@@ -178,15 +223,12 @@ public class SysUserController {
 //        writer.addHeaderAlias("tel", "电话");
 //        writer.addHeaderAlias("address", "地址");
 //        writer.addHeaderAlias("createTime", "创建时间");
-
         //一次性写出list对象到excel，使用默认样式，强制输出标题
         writer.write(list, true);
-
         //设置浏览器响应的格式
         resp.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8");
         String fileName = URLEncoder.encode("用户信息", "UTF-8");
         resp.setHeader("Content-Disposition", "attachment;filename=" + fileName + ".xlsx");
-
         ServletOutputStream out = resp.getOutputStream();
         writer.flush(out, true);
         out.close();
@@ -211,7 +253,7 @@ public class SysUserController {
             user.setEmail(row.get(3).toString());
             user.setPhone(row.get(4).toString());
             user.setAddress(row.get(5).toString());
-//            user.setAvatarUrl(row.get(6).toString());
+            user.setAvatarUrl(row.get(6).toString());
             users.add(user);
         }
 
