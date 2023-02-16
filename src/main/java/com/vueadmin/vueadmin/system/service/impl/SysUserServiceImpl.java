@@ -11,6 +11,7 @@ import com.vueadmin.vueadmin.system.controller.dto.UserDto;
 import com.vueadmin.vueadmin.system.entity.SysUser;
 import com.vueadmin.vueadmin.system.mapper.SysUserMapper;
 import com.vueadmin.vueadmin.system.service.SysUserService;
+import com.vueadmin.vueadmin.util.TokenUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -111,6 +112,8 @@ public  class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> imp
     public UserDto login(UserDto userDto) {
         SysUser user = getSysUserInfo(userDto);
         if (user != null) {
+            String token = TokenUtils.genToken(user.getId().toString(), user.getPassword());
+            userDto.setToken(token);
             BeanUtil.copyProperties(user, userDto, true);
             return userDto;
         } else {

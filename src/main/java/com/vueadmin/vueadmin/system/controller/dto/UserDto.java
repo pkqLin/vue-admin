@@ -20,31 +20,8 @@ public class UserDto {
      */
     private String nickname;
     /**
-     * email
+     * 头像url
      */
-    private String email;
-    /**
-     * 电话
-     */
-    private String phone;
-    /**
-     * 地址
-     */
-    private String address;
-    /**
-     * 创建时间
-     */
-    private Date createTime;
-    /**
-     * 创建人
-     */
-    private String createUser;
-    /**
-     * 更新时间
-     */
-    private Date updateTime;
-    /**
-     * 更新人
-     */
-    private String updateUser;
+    private String avatarUrl;
+    private String token;
 }
