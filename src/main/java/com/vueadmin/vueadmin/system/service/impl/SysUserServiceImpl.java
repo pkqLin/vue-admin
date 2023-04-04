@@ -73,7 +73,7 @@ public  class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> imp
         this.sysUserMapper.insert(sysUser);
         return sysUser;
     }
-
+    
     /**
      * 修改数据
      *
