@@ -51,15 +51,16 @@ public class FileController {
         }
         //定义一个文件的标识码
         String uuid = IdUtil.fastSimpleUUID();
+        String url="http://localhost:8091/file/"  + uuid + StrUtil.DOT + type;
         File uploadFile = new File(fileUploadPath + uuid + StrUtil.DOT + type);
         file.transferTo(uploadFile);
         SysFile sysFile = new SysFile();
         sysFile.setType(type);
-        sysFile.setSize(size);
+        sysFile.setSize(size/1024);
         sysFile.setName(originalFileName);
-        sysFile.setUrl("http://localhost:8091/" + fileUploadPath + uuid + StrUtil.DOT + type);
+        sysFile.setUrl(url);
         sysFileMapper.insert(sysFile);
-        return "http://localhost:8091/" + fileUploadPath + uuid + StrUtil.DOT + type;
+        return url;
     }
 
     /**
