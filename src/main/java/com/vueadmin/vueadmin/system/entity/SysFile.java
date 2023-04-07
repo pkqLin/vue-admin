@@ -37,6 +37,7 @@ public class SysFile implements Serializable {
     private Integer isDel;
     //是否禁用
     private Integer enable;
-
+    //md5
+    private String md5;
     }
 

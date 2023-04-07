@@ -26,4 +26,5 @@ mybatis-plus:
 files:
   upload:
     path: d:/fileLocal/
+    url: http://localhost:8091/file/
 
