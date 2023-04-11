@@ -4,9 +4,13 @@ package com.vueadmin.vueadmin.system.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.vueadmin.vueadmin.common.Constants;
 import com.vueadmin.vueadmin.common.Result;
+import com.vueadmin.vueadmin.system.entity.SysDict;
 import com.vueadmin.vueadmin.system.entity.SysMenu;
+import com.vueadmin.vueadmin.system.mapper.SysDictMapper;
 import com.vueadmin.vueadmin.system.service.SysMenuService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -27,6 +31,10 @@ public class SysMenuController  {
      */
     @Resource
     private SysMenuService menuService;
+
+
+    @Resource
+    private SysDictMapper dictMapper;
 
     /**
      * 分页查询所有数据
@@ -106,11 +114,13 @@ public class SysMenuController  {
      * @param idList 获取标
      * @return 删除结果
      */
-//    @GetMapping("/icons")
-//    public Result getIcons() {
-//        QueryWrapper<Dict> queryWrapper = new QueryWrapper<>();
-//        queryWrapper.eq("type", Constants.DICT_TYPE_ICON);
-//        return Result.success(dictMapper.selectList(queryWrapper));
-//    }
+    @GetMapping("/icons")
+    public Result getIcons() {
+        QueryWrapper<SysDict> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("type", Constants.DICT_TYPE_ICON);
+        List<SysDict> list =this.dictMapper.selectList(queryWrapper);
+        System.out.println(list);
+        return Result.success(list);
+    }
 
 }

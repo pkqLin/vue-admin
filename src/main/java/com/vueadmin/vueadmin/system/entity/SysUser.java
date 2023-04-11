@@ -73,6 +73,10 @@ public class SysUser implements Serializable {
      * 头像url
      */
     private String avatarUrl;
+    /**
+     * 角色role
+     */
+    private String role;
 
 
 

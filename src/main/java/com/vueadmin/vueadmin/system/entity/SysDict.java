@@ -1,5 +1,6 @@
 package com.vueadmin.vueadmin.system.entity;
 
+
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -11,27 +12,27 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 
 /**
- * (SysRole)表实体类
+ * (SysDict)表实体类
  *
  * @author makejava
- * @since 2023-04-10 14:14:32
+ * @since 2023-04-11 09:44:30
  */
 @SuppressWarnings("serial")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName(value="sys_role")
-public class SysRole implements Serializable {
-    private static final long serialVersionUID = 1L;
-    //id
-    @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
-    //权限
-    private String name;
-    //唯一标识
-    private String flag;
-    //描述
-    private String description;
+@TableName(value="sys_dict")
+public class SysDict implements Serializable  {
 
-    }
+    private static final long serialVersionUID = 1L;
+
+    //名称
+    private String name;
+    //内容
+    private String value;
+    //类型
+    private String type;
+
+
+}
 

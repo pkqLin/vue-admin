@@ -1,6 +1,7 @@
 package com.vueadmin.vueadmin.system.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.crypto.SecureUtil;
 import cn.hutool.log.Log;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -8,13 +9,19 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.vueadmin.vueadmin.common.Constants;
 import com.vueadmin.vueadmin.exception.ServiceException;
 import com.vueadmin.vueadmin.system.controller.dto.UserDto;
+import com.vueadmin.vueadmin.system.entity.SysMenu;
 import com.vueadmin.vueadmin.system.entity.SysUser;
+import com.vueadmin.vueadmin.system.mapper.SysRoleMapper;
+import com.vueadmin.vueadmin.system.mapper.SysRoleMenuMapper;
 import com.vueadmin.vueadmin.system.mapper.SysUserMapper;
+import com.vueadmin.vueadmin.system.service.SysMenuService;
 import com.vueadmin.vueadmin.system.service.SysUserService;
 import com.vueadmin.vueadmin.util.TokenUtils;
 import org.springframework.stereotype.Service;
+import sun.security.util.Password;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -23,6 +30,15 @@ public  class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> imp
 
     @Resource
     private SysUserMapper sysUserMapper;
+
+    @Resource
+    private SysRoleMapper roleMapper;
+
+    @Resource
+    private SysRoleMenuMapper roleMenuMapper;
+
+    @Resource
+    private SysMenuService menuService;
 
     /**
      * 通过ID查询单条数据
@@ -109,8 +125,8 @@ public  class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> imp
     }
 
     @Override
-    public UserDto login(UserDto userDto) {
-        SysUser user = getSysUserInfo(userDto);
+    public UserDto login(UserDto userDTO) {
+      /*  SysUser user = getSysUserInfo(userDto);
         if (user != null) {
             String token = TokenUtils.genToken(user.getId().toString(), user.getPassword());
             userDto.setToken(token);
@@ -118,10 +134,11 @@ public  class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> imp
             return userDto;
         } else {
             throw new ServiceException(Constants.CODE_600, "用户名或者密码错误");
-        }
-      /*  // 用户密码 md5加密
-        userDTO.setPassword(SecureUtil.md5(userDTO.getPassword()));
-        User one = getUserInfo(userDTO);
+        }*/
+        // 用户密码 md5加密
+//        SecureUtil.md5(userDTO.getPassword());
+        userDTO.setPassword(userDTO.getPassword());
+        SysUser one = getSysUserInfo(userDTO);
         if (one != null) {
             BeanUtil.copyProperties(one, userDTO, true);
             // 设置token
@@ -130,12 +147,12 @@ public  class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> imp
 
             String role = one.getRole(); // ROLE_ADMIN
             // 设置用户的菜单列表
-            List<Menu> roleMenus = getRoleMenus(role);
+            List<SysMenu> roleMenus = getRoleMenus(role);
             userDTO.setMenus(roleMenus);
             return userDTO;
         } else {
             throw new ServiceException(Constants.CODE_600, "用户名或密码错误");
-        }*/
+        }
     }
 
     @Override
@@ -169,6 +186,32 @@ public  class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> imp
             throw new ServiceException(Constants.CODE_500, "系统错误");
         }
         return one;
+    }
+
+    /**
+     * 获取当前角色的菜单列表
+     * @param roleFlag
+     * @return
+     */
+    private List<SysMenu> getRoleMenus(String roleFlag) {
+        Integer roleId = roleMapper.selectByFlag(roleFlag);
+        // 当前角色的所有菜单id集合
+        List<Integer> menuIds = roleMenuMapper.selectByRoleId(roleId);
+
+        // 查出系统所有的菜单(树形)
+        List<SysMenu> menus = menuService.findMenus("");
+        // new一个最后筛选完成之后的list
+        List<SysMenu> roleMenus = new ArrayList<>();
+        // 筛选当前用户角色的菜单
+        for (SysMenu menu : menus) {
+            if (menuIds.contains(menu.getId())) {
+                roleMenus.add(menu);
+            }
+            List<SysMenu> children = menu.getChildren();
+            // removeIf()  移除 children 里面不在 menuIds集合中的 元素
+            children.removeIf(child -> !menuIds.contains(child.getId()));
+        }
+        return roleMenus;
     }
 
 

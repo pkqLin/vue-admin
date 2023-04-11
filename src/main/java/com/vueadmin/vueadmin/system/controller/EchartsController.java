@@ -13,6 +13,7 @@ import com.vueadmin.vueadmin.system.service.SysUserService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import java.util.Date;
@@ -29,6 +30,15 @@ public class EchartsController {
 
     @Resource
     private SysFileMapper sysFileMapper;
+
+    @RequestMapping(value = "/greeting")
+    public ModelAndView test(ModelAndView mv) {
+        mv.setViewName("/greeting");
+        mv.addObject("title","欢迎使用Thymeleaf!");
+        mv.addObject("name","张三");
+        mv.addObject("age","28!");
+        return mv;
+    }
 
     @GetMapping("/example")
     public Result get() {
