@@ -18,5 +18,13 @@ public interface SysDictMapper extends BaseMapper<SysDict> {
 
     Page<SysUser> findPage(Page<SysDict> page, @Param("username") String username);
 
+    /*   *
+     * 通过主键删除数据
+     *
+     * @param id 主键
+     * @return 影响行数*/
+
+    int deleteById(Integer id);
+
 }
 

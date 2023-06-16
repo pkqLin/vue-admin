@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vueadmin.vueadmin.system.mapper.SysOrgMapper">
+
+    <resultMap type="com.vueadmin.vueadmin.system.entity.SysOrg" id="SysOrgMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="orgCode" column="org_code" jdbcType="VARCHAR"/>
+        <result property="orgName" column="org_name" jdbcType="VARCHAR"/>
+        <result property="level" column="level" jdbcType="INTEGER"/>
+        <result property="pcode" column="pcode" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="createUser" column="create_user" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="updateUser" column="update_user" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!-- 批量插入 -->
+    <insert id="insertBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into vuel.sys_org(org_code, org_name, level, pcode, create_time, create_user, update_time, update_user)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+        (#{entity.orgCode}, #{entity.orgName}, #{entity.level}, #{entity.pcode}, #{entity.createTime}, #{entity.createUser}, #{entity.updateTime}, #{entity.updateUser})
+        </foreach>
+    </insert>
+    <!-- 批量插入或按主键更新 -->
+    <insert id="insertOrUpdateBatch" keyProperty="id" useGeneratedKeys="true">
+        insert into vuel.sys_org(org_code, org_name, level, pcode, create_time, create_user, update_time, update_user)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.orgCode}, #{entity.orgName}, #{entity.level}, #{entity.pcode}, #{entity.createTime}, #{entity.createUser}, #{entity.updateTime}, #{entity.updateUser})
+        </foreach>
+        on duplicate key update
+         org_code = values(org_code) , org_name = values(org_name) , level = values(level) , pcode = values(pcode) , create_time = values(create_time) , create_user = values(create_user) , update_time = values(update_time) , update_user = values(update_user)     </insert>
+
+</mapper>
+

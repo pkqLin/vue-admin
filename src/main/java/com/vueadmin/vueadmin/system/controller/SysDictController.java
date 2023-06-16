@@ -7,6 +7,8 @@ import com.vueadmin.vueadmin.system.service.SysDictService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/dict")
 public class SysDictController {
@@ -34,5 +36,29 @@ public class SysDictController {
     @PostMapping("add")
     public Result insert(@RequestBody SysDict sysDict) {
         return Result.success(this.sysDictService.saveOrUpdate(sysDict));
+    }
+
+    /***
+    * @description: 根据id删除数据
+    * @authoe: lin
+    * @date: 2023/6/15 9:38
+    * @version: 1.0
+    */
+    @DeleteMapping("/{id}")
+    public Result deleteById(@PathVariable Integer id) {
+        return Result.success(this.sysDictService.deleteById(id));
+    }
+
+    /**
+    * @description: 批量删除
+    * @authoe: lin
+    * @date: 2023/6/15 10:07
+    * @version: 1.0
+    */
+
+    @PostMapping("/del/batch")
+    public Result deleteBatch(@RequestBody List<Integer> ids) {
+        sysDictService.removeByIds(ids);
+        return Result.success();
     }
 }

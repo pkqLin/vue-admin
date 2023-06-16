@@ -27,5 +27,10 @@ public class SysDictServiceImpl extends ServiceImpl<SysDictMapper, SysDict> impl
     public Page<SysUser> findPage(Page<SysDict> page, String username) {
         return sysDictMapper.findPage(page, username);
     }
+
+    @Override
+    public boolean deleteById(Integer id){
+        return sysDictMapper.deleteById(id)>0;
+    }
 }
 

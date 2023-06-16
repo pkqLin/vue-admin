@@ -16,6 +16,9 @@ public interface SysDictService extends IService<SysDict> {
     Page<SysUser> findPage(Page<SysDict> objectPage, String name);
 
 
+    boolean deleteById(Integer id);
+
+
 
 }
 
